@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>P5M Manajemen Informatika ASP</title>  
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="~/Content/assets/img/himma.png" rel="icon">
+    <link href="~/Content/assets/img/himma.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="~/Content/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/Content/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/Content/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="~/Content/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="~/Content/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="~/Content/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="~/Content/assets/css/style.css" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Updated: Aug 30 2023 with Bootstrap v5.3.1
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+    <!-- DataTables JS -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+    
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="logo d-flex align-items-center">
+                <img src="~/Content/assets/img/himma.png" alt="">
+                <span class="d-none d-lg-block">P5M</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+    </header><!-- End Header -->
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" asp-controller="Dashboard" asp-action="Index">
+                    <i class="bi bi-grid"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+ 
+            <li class="nav-item">
+                <a class="nav-link collapsed" asp-controller="Pengguna" asp-action="Index">
+                    <i class="bi bi-person-rolodex"></i>
+                    <span>Pengguna</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" asp-controller="Mahasiswa" asp-action="Index">
+                    <i class="bi bi-ui-checks-grid"></i>
+                    <span>Mahasiswa</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-postcard"></i><span>Absensi</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+
+                        <a asp-controller="Pelanggaran" asp-action="Index">
+                            <i class="bi bi-circle"></i><span>Import Absensi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="P5M" asp-action="HistoryAbsensi">
+                            <i class="bi bi-circle"></i><span>Laporan Absensi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="P5M" asp-action="HistoryAbsen">
+                            <i class="bi bi-circle"></i><span>Laporan Jam Minus Absensi</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-ui-checks-grid"></i><span>Pelanggaran</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a asp-controller="Pelanggaran" asp-action="Index">
+                            <i class="bi bi-circle"></i><span>Kelola Pelanggaran</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Pelanggaran" asp-action="Index">
+                            <i class="bi bi-circle"></i><span>P5M</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Pelanggaran" asp-action="Index">
+                            <i class="bi bi-circle"></i><span>History P5M</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="P5M" asp-action="History">
+                            <i class="bi bi-circle"></i><span>Laporan Jam Minus P5M</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" asp-controller="P5M" asp-action="Create">
+                    <i class="bi bi-file-earmark-person"></i>
+                    <span>Halaman SSO</span>
+                </a>
+            </li><!-- End SSO Page Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" asp-controller="Pelanggaran" asp-action="Index">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+
+    </aside><!-- End Sidebar-->
+
+    <main id="main" class="main">
+        @RenderBody()
+    </main><!-- End #main -->
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Manajemen <strong>Informatika</strong>
+                <div class="credits">
+                    <a href="https://www.polytechnic.astra.ac.id//">Politeknik Astra</a>
+                </div>
+        </div>
+    </footer><
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="~/Content/assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="~/Content/assets/vendor/echarts/echarts.min.js"></script>
+    <script src="~/Content/assets/vendor/quill/quill.min.js"></script>
+    <script src="~/Content/assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="~/Content/assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="~/Content/assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="~/Content/assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
+
+   
+
+</body>
+
+</html>

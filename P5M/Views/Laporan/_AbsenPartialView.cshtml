@@ -1,0 +1,39 @@
+﻿@model List<P5M.Models.MahasiswaPelanggaranDataModel>
+<section class="section" style="font-size:12px">
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table datatable">
+                <thead>
+                    <tr>
+                        <th>NIM</th>
+                        <th>Nama</th>
+                        <th>Jenis</th>
+                        <th>Jumlah Jam</th>
+                        <th>Keterangan</th>
+                        <th>Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var mahasiswa in Model)
+                    {
+                        <tr>
+                            <td>@mahasiswa.nim</td>
+                            <td>@mahasiswa.nama</td>
+                            <td>@mahasiswa.jenis</td>
+                            <td>@mahasiswa.jumlah_jam</td>
+                            <td>@mahasiswa.keterangan</td>
+                            <td>@mahasiswa.tanggal.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        // Initialize Datatables for the second table
+        var table = new simpleDatatables.DataTable('.datatable');
+    });
+</script>
+

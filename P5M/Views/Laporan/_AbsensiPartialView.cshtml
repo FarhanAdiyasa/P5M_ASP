@@ -1,0 +1,91 @@
+﻿@model List<P5M.Models.AbsensiViewModel>
+@{
+    DateTime tanggalMulai = (DateTime)ViewData["tanggalMulai"];
+    DateTime tanggalSelesai = (DateTime)ViewData["tanggalSelesai"];
+    int selisih = (int)(tanggalSelesai - tanggalMulai).TotalDays;
+
+    HashSet<string> uniqueNIMs = new HashSet<string>(Model.Select(m => m.nim));
+    string[] nimArray = uniqueNIMs.ToArray();
+
+    HashSet<string> uniqueNames = new HashSet<string>(Model.Select(m => m.nama));
+    string[] namaArray = uniqueNames.ToArray();
+
+    int inc = 1;
+}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table datatable">
+                <thead>
+                <tr>
+                    <th scope="col" style="text-align: center" colspan="@selisih"></th>
+                </tr>
+
+                <tr>
+                    <th scope="col" style="text-align: center" rowspan="3">No</th>
+                    <th scope="col" style="text-align: center" rowspan="3">Nim</th>
+                    <th scope="col" style="text-align: center" rowspan="5">Nama</th>
+                </tr>
+                    <tr>
+                        @for (int i = 0; i <= selisih; i++)
+                        {
+                        <th scope="col" style="text-align: center" colspan="2">@tanggalMulai.ToString("dd-MM-yyyy")</th>
+                            tanggalMulai = tanggalMulai.AddDays(1);
+                        }
+                    </tr>
+                <tr>
+                    @for (int i = 0; i <= selisih; i++)
+                    {
+                        <th scope="col" style="text-align: center">IN</th>
+                        <th scope="col" style="text-align: center">OUT</th>
+                    }
+                </tr>
+                </thead>
+                @{
+                tanggalMulai = tanggalMulai.AddDays(-selisih-1);
+                }
+                <tbody>
+                    @foreach (var nim in nimArray)
+                    {
+                        <tr>
+                            <td>@inc</td>
+                            <td>@nim</td>
+                        <td>@namaArray[inc-1]</td>
+                            @for (int i = 0; i <= selisih; i++)
+                            {
+                                @foreach (var mahasiswa in Model)
+                                {
+                                    if (nim == mahasiswa.nim)
+                                    {
+                                        if (tanggalMulai.ToString("dd/MM/yyyy") == mahasiswa.tanggal)
+                                        {
+                                            <td>@mahasiswa.inTime</td>
+                                            <td>@mahasiswa.outTime</td>
+                                        }
+                                        else
+                                        {
+                                            if(tanggalMulai <= tanggalSelesai)
+                                            {
+                                                <td style="background-color: red;"></td>
+                                                <td style="background-color: red;"></td>
+                                            }
+                                        
+                                        }
+                                    }
+                                    tanggalMulai = tanggalMulai.AddDays(1);
+                                }
+                            }
+                        </tr>
+                        inc++;
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+<script>
+    $(document).ready(function () {
+        // Initialize Datatables for the second table
+        var table = new simpleDatatables.DataTable('.datatable');
+    });
+</script>
+

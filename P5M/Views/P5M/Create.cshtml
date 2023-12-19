@@ -1,0 +1,56 @@
+﻿@model List<MahasiswaModel>
+@using Microsoft.EntityFrameworkCore;
+
+@{
+    List<PelanggaranModel> pelanggaranModels;
+    using (var dbContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>()))
+    {
+        pelanggaranModels = dbContext.Pelanggaran.Where(m => m.status == 1).ToList();
+    }
+}
+
+<br />
+<section class="section">
+    <div class="col-12">
+        <div class="card recent-sales overflow-auto">
+            <div class="card-body">
+                <br>
+                <table class="table table-borderless datatable">
+                    <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Nim</th>
+                            <th scope="col">Nama Mahasiswa</th>
+                            @foreach (var pel in pelanggaranModels)
+                            {
+                                <th>@pel.nama_pelanggaran</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 0;
+                        }
+                        @foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.nim</td>
+                                <td>@item.nama</td>
+                                @foreach (var pel in pelanggaranModels)
+                                {
+                                    <td>
+                                        <input type="checkbox" id="checkbox_@item.nim _ @pel.id" name="checkbox[@item.nim][@pel.id]" />
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <br />
+                <br />
+            </div>
+        </div>
+    </div><!-- End Recent Sales -->
+</section>

@@ -1,0 +1,111 @@
+﻿@model P5M.Models.MahasiswaModel
+@{
+    ViewData["Title"] = "Edit Mahasiswa";
+}
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: 'https://api.polytechnic.astra.ac.id:2906/api_dev/efcc359990d14328fda74beb65088ef9660ca17e/SIA/getListKaryawan',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data && Array.isArray(data)) {
+                    for (var i = 0; i < data.length; i++) {
+                        var currentItem = data[i];
+
+                        if (currentItem && currentItem.struktur === "Prodi MI") {
+                            var option = "<option value='" + currentItem.nama + "'";
+
+                            // Check if the current item matches the existing Dosen Wali
+                            if ('@Model.dosen_wali' === currentItem.nama) {
+                                option += " selected";
+                            }
+
+                            option += ">" + currentItem.nama + "</option>";
+                            $('#pilihDosen').append(option);
+                        }
+                    }
+                } else {
+                    console.log("Data tidak valid atau tidak memenuhi kondisi.");
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+</script>
+
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Edit Mahasiswa</h5>
+                    <hr />
+
+                    <form asp-controller="Mahasiswa" asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label asp-for="nim" class="control-label">NIM</label>
+                            <input asp-for="nim" class="form-control" readonly />
+                            <span asp-validation-for="nim" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="prodi" class="control-label">Prodi</label>
+                            <select asp-for="prodi" class="form-select" name="prodi" required>
+                                <option value="">-- Pilih Prodi --</option>
+                                @foreach (var kelas in (List<string>)ViewData["KelasMahasiswaNama"])
+                                {
+                                    <option value="@kelas">@kelas</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="kelas" class="control-label">Kelas</label>
+                            <input asp-for="kelas" class="form-control" placeholder="Tahun-Ajaran Prodi Kelas : 1718033A" />
+                            <span asp-validation-for="kelas" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="nama" class="control-label">Nama</label>
+                            <input asp-for="nama" class="form-control" />
+                            <span asp-validation-for="nama" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="email" class="control-label">Email</label>
+                            <input asp-for="email" class="form-control" />
+                            <span asp-validation-for="email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="angkatan" class="control-label">Angkatan</label>
+                            <input asp-for="angkatan" class="form-control" />
+                            <span asp-validation-for="angkatan" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="dosen_wali" class="control-label">Dosen Wali</label>
+                            <select asp-for="dosen_wali" class="form-select" style="width:100%" required id="pilihDosen">
+                                <option value="">-- Pilih Dosen Wali --</option>
+                                <!-- You may populate this dropdown with the selected value -->
+                            </select>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                            <a asp-action="Index" class="btn btn-secondary">Kembali</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
