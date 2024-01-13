@@ -24,13 +24,6 @@
                                 <input asp-for="jam_minus" class="form-control" name="jam_minus" />
                                 <span asp-validation-for="jam_minus" class="text-danger"></span>
                             </div>
-                            <div class="form-group">
-                                <label asp-for="status" class="control-label">Status</label>
-                                <select asp-for="status" asp-items="Html.GetEnumSelectList<P5M.Models.PelanggaranModel.Status>()" class="form-control" name="status">
-                                    <option value="">-- Pilih Status --</option>
-                                </select>
-                                <span asp-validation-for="status" class="text-danger"></span>
-                            </div>
 
                             <br />
                             <div class="form-group">

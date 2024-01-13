@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using P5M.Models;
@@ -7,6 +8,7 @@ using System.Linq;
 
 namespace P5M.Controllers
 {
+    [Authorize]
     public class PenggunaController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -49,6 +51,7 @@ namespace P5M.Controllers
             {
                 _dbContext.Pengguna.Add(penggunaModel);
                 _dbContext.SaveChanges();
+                AddLog("Tambah Pengguna " + penggunaModel.nama_pengguna, DateTime.Now);
                 TempData["SuccessMessage"] = "Data berhasil ditambahkan";
                 return RedirectToAction("Index");
             }
@@ -57,8 +60,21 @@ namespace P5M.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
+            using (HttpClient client = new HttpClient())
+            {
+                string apiUrl = "https://api.polytechnic.astra.ac.id:2906/api_dev/efcc359990d14328fda74beb65088ef9660ca17e/SIA/getListMahasiswa?id_konsentrasi=3";
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    var dataMahasiswa = JsonConvert.DeserializeObject<List<MahasiswaModel>>(apiResponse);
+
+                    ViewData["KelasMahasiswa"] = dataMahasiswa.Select(dm => dm.kelas).Distinct().ToList();
+                }
+            }
             PenggunaModel penggunaModel = _dbContext.Pengguna.Find(id);
             if (penggunaModel == null)
             {
@@ -87,6 +103,7 @@ namespace P5M.Controllers
 
                 _dbContext.Pengguna.Update(existingPenggunaModel);
                 _dbContext.SaveChanges();
+                AddLog("Update Pengguna " + penggunaModel.nama_pengguna, DateTime.Now);
                 TempData["SuccessMessage"] = "Data Pengguna berhasil diupdate.";
                 return RedirectToAction("Index");
             }
@@ -106,7 +123,7 @@ namespace P5M.Controllers
                     penggunaModel.status = 0;
                     _dbContext.Pengguna.Update(penggunaModel);
                     _dbContext.SaveChanges();
-
+                    AddLog("Hapus Pengguna " + penggunaModel.nama_pengguna, DateTime.Now);
                     response = new { success = true, message = "Data Pengguna berhasil dihapus." };
                 }
                 else
@@ -119,6 +136,19 @@ namespace P5M.Controllers
                 response = new { success = false, message = ex.Message };
             }
             return Json(response);
+        }
+        private void AddLog(string aktifitas, DateTime tanggal)
+        {
+            var loggedInUsername = HttpContext.Session.GetString("LoggedInUsername");
+
+            var log = new LogModel
+            {
+                aktifitas = loggedInUsername + ", " + aktifitas,
+                tanggal = tanggal
+            };
+
+            _dbContext.Log.Add(log);
+            _dbContext.SaveChanges();
         }
     }
 }

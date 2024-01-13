@@ -15,9 +15,5 @@ namespace P5M.Models
         [Required(ErrorMessage = "Tanggal transaksi wajib diisi!")]
         [DataType(DataType.DateTime)]
         public DateTime tgl_transaksi { get; set; }
-
-        [Required(ErrorMessage = "Kelas wajib diisi!")]
-        [StringLength(50, ErrorMessage = "Kelas maksimal 50 karakter")]
-        public string kelas { get; set; }
     }
 }

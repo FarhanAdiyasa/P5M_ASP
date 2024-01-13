@@ -10,7 +10,7 @@ namespace P5M.Models
         public string nim { get; set; }
         public string nama { get; set; }
         public string jenis { get; set; }
-        public decimal jumlah_jam { get; set; }
+        public int jumlah_jam { get; set; }
         public string keterangan { get; set; }
         public DateTime tanggal { get; set; }
     }

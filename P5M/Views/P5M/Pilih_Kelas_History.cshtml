@@ -1,0 +1,17 @@
+﻿<div class="pagetitle">
+    <h1>History P5M</h1>
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Pilih Kelas History P5M</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+<div class="list-group">
+    @foreach (var kelas in (List<string>)ViewData["KelasMahasiswa"])
+    {
+        <a asp-controller="P5M" asp-action="HistoryP5MKelas" asp-route-kelas="@kelas" class="list-group-item list-group-item-action mb-3">
+            @kelas
+        </a>
+    }
+</div>

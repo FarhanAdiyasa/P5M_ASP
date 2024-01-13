@@ -1,56 +1,148 @@
-﻿@model List<MahasiswaModel>
-@using Microsoft.EntityFrameworkCore;
-
+﻿@model List<P5M.Models.PelanggaranModel>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Microsoft.AspNetCore.Http
 @{
-    List<PelanggaranModel> pelanggaranModels;
-    using (var dbContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>()))
-    {
-        pelanggaranModels = dbContext.Pelanggaran.Where(m => m.status == 1).ToList();
-    }
+    ViewData["Title"] = "Tambah Pelanggaran";
+    var loggedInUsername = ViewContext.HttpContext.Session.GetString("LoggedInUsername");
+    var loggedInRole = ViewContext.HttpContext.Session.GetString("LoggedInRole");
+    var loggedInKelas = ViewContext.HttpContext.Session.GetString("LoggedInKelas");
 }
 
-<br />
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- ... -->
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    const dtMhs = () => {
+        $.ajax({
+            url: 'https://api.polytechnic.astra.ac.id:2906/api_dev/efcc359990d14328fda74beb65088ef9660ca17e/SIA/getListMahasiswa?id_konsentrasi=3',
+            method: 'GET',
+            success: function (data) {
+                populateTable(data);
+            },
+            error: function (error) {
+                console.error('Error fetching data from the API:', error);
+            }
+        });
+    }
+
+    function populateTable(data) {
+        var tableBody = $('#dataHistory tbody');
+        tableBody.empty();
+        let idx = 1;
+
+        $.each(data, function (index, mahasiswa) {
+            if (mahasiswa.kelas == $('#kelas').val()) {
+                var row = '<tr>' +
+                    '<td class="text-center">' + (idx) + '</td>' +
+                    '<td class="text-center">' + mahasiswa.nim + '</td>' +
+                    '<td class="text-center">' + mahasiswa.nama + '</td>';
+                    @foreach (var pelanggaran in Model)
+                    {
+                        <text>
+                                        row += '<td class="text-center"> <input type="checkbox" id="CB_' + mahasiswa.nim + '_' + @pelanggaran.id + '" name="CB_' + mahasiswa.nim + '_' + @pelanggaran.id + '" value="@pelanggaran.jam_minus"></td>';
+                        </text>
+                    }
+                row += '</tr>';
+                tableBody.append(row);
+                idx++;
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        dtMhs();
+
+        $('#kelas').change(function () {
+            dtMhs();
+        });
+    });
+</script>
+
+<!-- ... -->
+<!-- The rest of your HTML code... -->
+
 <section class="section">
-    <div class="col-12">
-        <div class="card recent-sales overflow-auto">
-            <div class="card-body">
-                <br>
-                <table class="table table-borderless datatable">
-                    <thead>
-                        <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Nim</th>
-                            <th scope="col">Nama Mahasiswa</th>
-                            @foreach (var pel in pelanggaranModels)
-                            {
-                                <th>@pel.nama_pelanggaran</th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            int i = 0;
-                        }
-                        @foreach (var item in Model)
-                        {
-                            i++;
-                            <tr>
-                                <td>@i</td>
-                                <td>@item.nim</td>
-                                <td>@item.nama</td>
-                                @foreach (var pel in pelanggaranModels)
+    <div class="container">
+        <div class="row">
+            <div class="card container overflow-auto">
+                <div class="card-body container">
+                    <h5 class="card-title">Laporan Jam Minus Absensi</h5>
+                    <hr />
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="row">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-check-circle me-1"></i>
+                                <strong>Sukses!</strong> @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    }
+                    <div class="row">
+                        <!-- ... -->
+
+                        <div class="form-group col-2" id="filterAfterChoose">
+                            <select class="form-select" name="filterValue" id="kelas" onchange="dtMhs()" required>
+                                @if (loggedInRole == "KOORDINATOR SOP dan TATIB")
                                 {
-                                    <td>
-                                        <input type="checkbox" id="checkbox_@item.nim _ @pel.id" name="checkbox[@item.nim][@pel.id]" />
-                                    </td>
+                                    foreach (var kelas in (List<string>)ViewData["KelasMahasiswa"])
+                                    {
+                                        <option value="@kelas">@kelas</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="@loggedInKelas">@loggedInKelas</option>
+                                }
+                            </select>
+                        </div>
+
+
+                        <!-- ... -->
+
+
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-body" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form method="post" asp-controller="P5M" asp-action="Create" id="formP5M" enctype="multipart/form-data">
+                    <table class="table" id="dataHistory">
+                        <thead>
+                            <tr>
+                                <th class="text-center">No</th>
+                                <th class="text-center">NIM</th>
+                                <th class="text-center">Nama Mahasiswa</th>
+                                @foreach (var pelanggaran in Model)
+                                {
+                                    <th class="text-center">@pelanggaran.nama_pelanggaran</th>
                                 }
                             </tr>
-                        }
-                    </tbody>
-                </table>
-                <br />
-                <br />
+                        </thead>
+                        <tbody>
+                           <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                @foreach (var pelanggaran in Model)
+                                {
+                                    <td></td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
             </div>
         </div>
-    </div><!-- End Recent Sales -->
+    </div>
+   
 </section>

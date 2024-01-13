@@ -1,8 +1,52 @@
 ﻿@model P5M.Models.PenggunaModel
 
 @{
-    ViewData["Title"] = "Edit Pengguna";
+    ViewData["Title"] = "Tambah Pengguna";
 }
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: 'https://api.polytechnic.astra.ac.id:2906/api_dev/efcc359990d14328fda74beb65088ef9660ca17e/SIA/getListKaryawan',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data && Array.isArray(data)) {
+                    for (var i = 0; i < data.length; i++) {
+                        var currentItem = data[i];
+
+                        if (currentItem && currentItem.struktur === "Unit Pelayanan Teknis Informatika") {
+                            $('#nama_pengguna').val(currentItem.nama);
+                            $('#username').val(currentItem.username);
+                            var option = "<option value='" + currentItem.username + "'>" + currentItem.nama + "</option>";
+                            $('#pilihPengguna').append(option);
+                        }
+                    }
+                } else {
+                    console.log("Data tidak valid atau tidak memenuhi kondisi.");
+                }
+
+                // Panggil fungsi change setelah proses ajax selesai
+                change();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+
+        function change() {
+            $('#pilihPengguna').on('change', function () {
+                var selectedUsername = $('#pilihPengguna option:selected').val();
+                $('#username').val(selectedUsername);
+
+                var selectedNamaPengguna = $('#pilihPengguna option:selected').text();
+                $('#nama_pengguna').val(selectedNamaPengguna);
+                console.log(selectedUsername, selectedNamaPengguna);
+            });
+        }
+    });
+</script>
+
 
 <div class="content">
     <div class="container-fluid">
@@ -10,38 +54,42 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Edit Pengguna</h4>
+                        <h4 class="card-title">EDIT Pengguna</h4>
                     </div>
                     <div class="card-body">
                         <form method="post" asp-controller="Pengguna" asp-action="Edit">
-                            <input type="hidden" asp-for="id" />
                             <div class="form-group">
-                                <label asp-for="username" class="control-label">Username</label>
-                                <input asp-for="username" class="form-control" name="username" />
-                                <span asp-validation-for="username" class="text-danger"></span>
+                                <label class="control-label">Nama Pengguna</label>
+                                <select class="form-select" style="width:100%" required id="pilihPengguna">
+                                    <option value="">-- Pilih Nama Pengguna --</option>
+
+                                </select>
+                                <span class="text-danger"></span>
                             </div>
-                            <div class="form-group">
-                                <label asp-for="nama_pengguna" class="control-label">Nama Pengguna</label>
-                                <input asp-for="nama_pengguna" class="form-control" name="nama_pengguna" />
-                                <span asp-validation-for="nama_pengguna" class="text-danger"></span>
-                            </div>
+                            <input asp-for="username" class="form-control" name="username" id="username" value="" type="hidden" />
+                            <input asp-for="nama_pengguna" class="form-control" name="nama_pengguna" id="nama_pengguna" value="" type="hidden" />
                             <div class="form-group">
                                 <label asp-for="role" class="control-label">Role</label>
-                                <input asp-for="role" class="form-control" name="role" />
+                                <select asp-for="role" class="form-select" style="width:100%" required>
+                                    <option value="null">-- Pilih Role --</option>
+                                    <option value="KOORDINATOR SOP dan TATIB">KOORDINATOR SOP dan TATIB</option>
+                                    <option value="KOORDINATOR TINGKAT">KOORDINATOR TINGKAT</option>
+                                    <option value="KOORDINATOR TINGKAT">SEKRETARIS PRODI</option>
+                                    <!-- Add more options as needed -->
+                                </select>
                                 <span asp-validation-for="role" class="text-danger"></span>
                             </div>
+
                             <div class="form-group">
                                 <label asp-for="kelas" class="control-label">Kelas</label>
-                                <input asp-for="kelas" class="form-control" name="kelas" />
-                                <span asp-validation-for="kelas" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="status" class="control-label">Status</label>
-                                <select asp-for="status" class="form-control" name="status">
-                                    <option value="0" selected="@((Model.status ?? 0) == 0)">Tidak Aktif</option>
-                                    <option value="1" selected="@((Model.status ?? 0) == 1)">Aktif</option>
+                                <select asp-for="kelas" class="form-select" name="kelas" required>
+                                    <option value="">-- Pilih Kelas --</option>
+                                    @foreach (var kelas in (List<string>)ViewData["KelasMahasiswa"])
+                                    {
+                                        <option value="@kelas">@kelas</option>
+                                    }
                                 </select>
-                                <span asp-validation-for="status" class="text-danger"></span>
+                                <span asp-validation-for="kelas" class="text-danger"></span>
                             </div>
 
                             <br />

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using P5M.Models;
 using System;
@@ -6,6 +7,7 @@ using System.Linq;
 
 namespace P5M.Controllers
 {
+    [Authorize]
     public class PelanggaranController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -34,6 +36,7 @@ namespace P5M.Controllers
             {
                 _dbContext.Pelanggaran.Add(pelanggaranModel);
                 _dbContext.SaveChanges();
+                AddLog("Tambah Pelanggaran " + pelanggaranModel.nama_pelanggaran, DateTime.Now);
                 TempData["SuccessMessage"] = "Data berhasil ditambahkan";
                 return RedirectToAction("Index");
             }
@@ -70,6 +73,7 @@ namespace P5M.Controllers
 
                 _dbContext.Pelanggaran.Update(newPelanggaranModel);
                 _dbContext.SaveChanges();
+                AddLog("Update Pelanggaran " + pelanggaranModel.nama_pelanggaran, DateTime.Now);
                 TempData["SuccessMessage"] = "Data Pelanggaran berhasil diupdate.";
                 return RedirectToAction("Index");
             }
@@ -82,10 +86,14 @@ namespace P5M.Controllers
             var response = new { success = false, message = "Gagal menghapus Data Pelanggaran." };
             try
             {
-                if (id != null)
+                PelanggaranModel pelanggaranModel = _dbContext.Pelanggaran.Find(id);
+                if (pelanggaranModel != null)
                 {
-                    _dbContext.Pelanggaran.Remove(_dbContext.Pelanggaran.FirstOrDefault(x => x.id == id));
+                    // Instead of directly removing, update the status to 0
+                    pelanggaranModel.status = 0;
+                    _dbContext.Pelanggaran.Update(pelanggaranModel);
                     _dbContext.SaveChanges();
+                    AddLog("Hapus Pelanggaran " + pelanggaranModel.nama_pelanggaran, DateTime.Now);
                     response = new { success = true, message = "Data Pelanggaran berhasil dihapus." };
                 }
                 else
@@ -98,6 +106,19 @@ namespace P5M.Controllers
                 response = new { success = false, message = ex.Message };
             }
             return Json(response);
+        }
+        private void AddLog(string aktifitas, DateTime tanggal)
+        {
+            var loggedInUsername = HttpContext.Session.GetString("LoggedInUsername");
+
+            var log = new LogModel
+            {
+                aktifitas = loggedInUsername + ", " + aktifitas,
+                tanggal = tanggal
+            };
+
+            _dbContext.Log.Add(log);
+            _dbContext.SaveChanges();
         }
     }
 }

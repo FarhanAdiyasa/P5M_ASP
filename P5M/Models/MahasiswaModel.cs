@@ -24,7 +24,7 @@ namespace P5M.Models
         public string email { get; set; }
 
         [StringLength(4)]
-        public string angkatan { get; set; }
+        public string mhs_angkatan { get; set; }
 
         [StringLength(int.MaxValue)]
         public string dosen_wali { get; set; }

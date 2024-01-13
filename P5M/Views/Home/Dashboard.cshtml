@@ -1,0 +1,280 @@
+﻿@model List<LogModel>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Microsoft.AspNetCore.Http
+@{
+    var loggedInUsername = ViewContext.HttpContext.Session.GetString("LoggedInUsername");
+    var loggedInRole = ViewContext.HttpContext.Session.GetString("LoggedInRole");
+}
+@{
+    ViewData["Title"] = "Home Page";
+}
+    <div class="pagetitle">
+    <h1>Dashboard</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <div class="col-6">
+              <div class="card">
+
+                <div class="card-body text-center">
+                  <h5 class="card-title">Reminder P5M</h5>
+                    @if (ViewData["SudahP5M"] is bool sudahP5M && sudahP5M)
+                    {
+                                <p>
+                                    Sudah P5M Hari Ini
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="#00FF00" class="bi bi-check2-all" viewBox="0 0 16 16">
+                                        <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0" />
+                                        <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708" />
+                                    </svg>
+                                </p>
+
+
+                    }
+                    else
+                    {
+                                <p>
+                                    Belum P5M Hari Ini
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="#FF0000" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                    </svg>
+                                </p>
+                    }
+                </div>
+
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="card">
+
+                <div class="card-body text-center">
+                  <h5 class="card-title">Import Absensi Terakhir</h5>
+                            <p>@ViewData["LatestWaktu"]</p>
+                </div>
+
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Rekap Pelanggaran Yang Dilakukan <span>/Today</span></h5>
+
+                   <div id="chart">
+
+                   </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="filter">
+                    <i class="bi bi-download bi-4x mx-3" style="cursor:pointer" id="downloadButton"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Recent Activity </h5>
+                    <div class="activity">
+                        @foreach (var item in Model.OrderByDescending(m => m.tanggal).Take(10))
+                        {
+                            var activityDate = item.tanggal.Date;
+                            var today = DateTime.Today;
+                            var yesterday = today.AddDays(-1);
+
+                            string displayDate;
+
+                            if (activityDate == today)
+                            {
+                                displayDate = "Today";
+                            }
+                            else if (activityDate == yesterday)
+                            {
+                                displayDate = "Yesterday";
+                            }
+                            else
+                            {
+                                displayDate = item.tanggal.ToString("yyyy-MM-dd");
+                            }
+
+                            <div class="activity-item d-flex">
+                                <div class="activite-label">@displayDate</div>
+                                <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                                <div class="activity-content">
+                                    @item.aktifitas
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+
+            </div><!-- End Recent Activity -->
+            <!-- Budget Report -->
+            <div class="card">
+                <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <li class="dropdown-header text-start">
+                            <h6>Filter</h6>
+                        </li>
+
+                        <li><a class="dropdown-item nim" href="#">Today</a></li>
+                        <li><a class="dropdown-item nim" href="#">This Month</a></li>
+                        <li><a class="dropdown-item nim" href="#">This Year</a></li>
+                    </ul>
+                </div>
+
+                <div class="card-body pb-0">
+                    <h5 class="card-title">Pelanggaran Banyak Dilakukan Oleh<span>| This Month</span></h5>
+
+                    <div id="Nimchart" style="min-height: 400px;">
+
+                    </div>
+            </div>
+        </div>
+
+      </div>
+    </section>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Initialize with default filter "Today"
+    loadPartialView("Today");
+    loadPartialViewNim("Today")
+    function loadPartialView(filter) {
+        var startDate, endDate;
+        var filterText;
+        if (filter == "Today") {
+            startDate = new Date();
+            endDate = startDate;
+            filterText = "/Today";
+        } else if (filter == "This Month") {
+            startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+            endDate = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+            filterText = "/This Month";
+        } else if (filter == "This Year") {
+            startDate = new Date(new Date().getFullYear(), 0, 1);
+            endDate = new Date(new Date().getFullYear(), 11, 31);
+            filterText = "/This Year";
+        }
+
+        var url = '/Home/LoadChart?startDate=' + startDate.toISOString().split('T')[0] + '&endDate=' + endDate.toISOString().split('T')[0];
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (data) {
+                $('#chart').html(data);
+
+                // Update the span in the h5 element with the selected filter
+                $('.card-title span').text(filterText);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // Add an event listener to the dropdown items
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function () {
+            // Get the selected filter value
+            const selectedFilter = this.innerHTML;
+
+            // Call the loadPartialView function with the selected filter
+            loadPartialView(selectedFilter);
+        });
+    });
+    function loadPartialViewNim(filter) {
+        var startDate, endDate;
+        var filterText;
+
+        // Implement logic to set startDate and endDate based on the selected filter
+        if (filter == "Today") {
+            startDate = new Date();
+            endDate = startDate;
+            filterText = "/Today";
+        } else if (filter == "This Month") {
+            startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+            endDate = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+            filterText = "/This Month";
+        } else if (filter == "This Year") {
+            startDate = new Date(new Date().getFullYear(), 0, 1);
+            endDate = new Date(new Date().getFullYear(), 11, 31);
+            filterText = "/This Year";
+        }
+
+        var url = '/Home/LoadChartNim?startDate=' + startDate.toISOString().split('T')[0] + '&endDate=' + endDate.toISOString().split('T')[0];
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (data) {
+                $('#Nimchart').html(data);
+
+                // Update the span in the h5 element with the selected filter
+                $('.card-title span').text(filterText);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // Add an event listener to the dropdown items
+    document.querySelectorAll('.nim').forEach(item => {
+        item.addEventListener('click', function () {
+            // Get the selected filter value
+            const selectedFilter = this.innerHTML;
+
+            // Call the loadPartialView function with the selected filter
+            loadPartialViewNim(selectedFilter);
+        });
+    });
+</script>
+<script>
+    document.getElementById('downloadButton').addEventListener('click', function () {
+        var blob = new Blob([JSON.stringify(@Html.Raw(Json.Serialize(Model.Select(m => new { m.tanggal, m.aktifitas }))), null, 2)], { type: 'text/plain' });
+
+        // Create a link element to trigger the download
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'sistemP5M_aktifitas.txt';
+
+        // Append the link element to the body and trigger the download
+        document.body.appendChild(a);
+        a.click();
+
+        // Remove the link element from the body
+        document.body.removeChild(a);
+    });
+</script>

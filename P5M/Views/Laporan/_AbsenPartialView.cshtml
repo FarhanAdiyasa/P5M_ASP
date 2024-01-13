@@ -1,39 +1,263 @@
-﻿@model List<P5M.Models.MahasiswaPelanggaranDataModel>
-<section class="section" style="font-size:12px">
-    <div class="row">
-        <div class="col-lg-12">
-            <table class="table datatable">
-                <thead>
+﻿@model List<P5M.Models.AbsensiViewModel>
+@using System.Globalization
+@{
+    DateTime tanggalMulai = (DateTime)ViewData["tanggalMulai"];
+    DateTime tanggalSelesai = (DateTime)ViewData["tanggalSelesai"];
+    int selisih = (int)(tanggalSelesai - tanggalMulai).TotalDays;
+
+    HashSet<string> uniqueNIMs = new HashSet<string>(Model.Select(m => m.nim));
+    string[] nimArray = uniqueNIMs.ToArray();
+
+    HashSet<string> uniqueNames = new HashSet<string>(Model.Select(m => m.nama));
+    string[] namaArray = uniqueNames.ToArray();
+
+    int inc = 1;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <table class="display hover" id="absensiTable">
+            <thead>
+                <tr>
+                    <th>NIM</th>
+                    <th>Nama</th>
+                    <th>Jenis</th>
+                    <th>Jumlah Jam</th>
+                    <th>Keterangan</th>
+                    <th>Tanggal</th>
+                </tr>
+            </thead>
+
+            @{
+                selisih = selisih + 1;
+                var cekTrue = false;
+            }
+            <tbody>
+                @foreach (var nim in (List<string>)ViewData["nimarray"])
+                {
+                    tanggalMulai = (DateTime)ViewData["tanggalMulai"];
+                    int ib = 0;
+                    int jam = 0;
                     <tr>
-                        <th>NIM</th>
-                        <th>Nama</th>
-                        <th>Jenis</th>
-                        <th>Jumlah Jam</th>
-                        <th>Keterangan</th>
-                        <th>Tanggal</th>
+                        <td>@nim</td>
+                        <td>@(((List<string>)ViewData["namaarray"])[inc - 1])</td>
+                        @foreach (var mahasiswa in Model)
+                        {
+                            ib++;
+                            if (nim == mahasiswa.nim)
+                            {
+                                cekTrue = false;
+
+                                @foreach (var tanggal in (List<string>)ViewData["tanggalarray"])
+                                {
+                                    if (tanggalMulai.ToString("dd-MM-yyyy").Equals(tanggal))
+                                    {
+                                        cekTrue = true;
+                                    }
+                                }
+
+                                if (cekTrue == false)
+                                {
+                                    if (tanggalMulai.ToString("dd-MM-yyyy") == mahasiswa.tanggal)
+                                    {
+                                        DateTime inTimeDateTime = DateTime.ParseExact(mahasiswa.inTime, "HH:mm:ss", CultureInfo.InvariantCulture);
+                                        DateTime outTimeDateTime = DateTime.ParseExact(mahasiswa.outTime, "HH:mm:ss", CultureInfo.InvariantCulture);
+
+                                        DateTime batasInTime = DateTime.ParseExact("07:30:59", "HH:mm:ss", CultureInfo.InvariantCulture);
+                                        DateTime batasOutTime = DateTime.ParseExact("16:30:50", "HH:mm:ss", CultureInfo.InvariantCulture);
+
+                                        TimeSpan selisihInTime = inTimeDateTime - batasInTime;
+                                        TimeSpan selisihOutTime = batasOutTime - outTimeDateTime;
+                                        if (inTimeDateTime.TimeOfDay < new TimeSpan(12, 0, 0))
+                                        {
+                                            if (selisihInTime.TotalMinutes < 30 && selisihInTime.TotalMinutes > 0)
+                                            {
+                                                jam += 1;
+
+
+                                            }
+                                            else if (selisihInTime.TotalMinutes > 30)
+                                            {
+                                                jam += (int)Math.Ceiling(selisihInTime.TotalHours) * 2;
+                                            }
+
+                                        }
+                                        else
+                                        {
+
+                                            jam += 4;
+                                        }
+                                        if (outTimeDateTime.TimeOfDay > new TimeSpan(12, 0, 0))
+                                        {
+
+                                        }
+                                        else
+                                        {
+
+                                            jam += 4;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        DateTime tanggalMahasiswa = DateTime.ParseExact(mahasiswa.tanggal, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                                        int selisih2 = (int)(tanggalMahasiswa - tanggalMulai).TotalDays;
+                                        @for (int j = 0; j <= selisih2; j++)
+                                        {
+                                            if (tanggalMulai.ToString("dd-MM-yyyy") == mahasiswa.tanggal)
+                                            {
+                                                DateTime inTimeDateTime = DateTime.ParseExact(mahasiswa.inTime, "HH:mm:ss", CultureInfo.InvariantCulture);
+                                                DateTime outTimeDateTime = DateTime.ParseExact(mahasiswa.outTime, "HH:mm:ss", CultureInfo.InvariantCulture);
+
+                                                DateTime batasInTime = DateTime.ParseExact("07:30:00", "HH:mm:ss", CultureInfo.InvariantCulture);
+                                                DateTime batasOutTime = DateTime.ParseExact("16:30:00", "HH:mm:ss", CultureInfo.InvariantCulture);
+
+                                                TimeSpan selisihInTime = inTimeDateTime - batasInTime;
+                                                TimeSpan selisihOutTime = batasOutTime - outTimeDateTime;
+                                                cekTrue = false;
+
+                                                @foreach (var tanggal in (List<string>)ViewData["tanggalarray"])
+                                                {
+                                                    if (tanggalMulai.ToString("dd-MM-yyyy").Equals(tanggal))
+                                                    {
+                                                        cekTrue = true;
+                                                    }
+                                                }
+
+                                                if (cekTrue == false)
+                                                {
+                                                    if (inTimeDateTime.TimeOfDay < new TimeSpan(12, 0, 0))
+                                                    {
+                                                        if (selisihInTime.TotalMinutes < 30 && selisihInTime.TotalMinutes > 0)
+                                                        {
+                                                            jam += 1;
+                                                        }
+                                                        else if (selisihInTime.TotalMinutes > 30)
+                                                        {
+                                                            jam += (int)Math.Ceiling(selisihInTime.TotalHours) * 2;
+                                                        }
+
+                                                    }
+                                                    else
+                                                    {
+                                                        jam += 4;
+                                                    }
+                                                    if (outTimeDateTime.TimeOfDay > new TimeSpan(12, 0, 0))
+                                                    {
+                                                    }
+                                                    else
+                                                    {
+
+                                                        jam += 4;
+                                                    }
+                                                }
+
+
+                                            }
+                                            else
+                                            {
+                                                if (tanggalMulai <= tanggalSelesai)
+                                                {
+                                                    if (tanggalMulai.DayOfWeek != DayOfWeek.Saturday && tanggalMulai.DayOfWeek != DayOfWeek.Sunday)
+                                                    {
+                                                        jam += 8;
+                                                    }
+                                                }
+                                            }
+
+                                            if (j < selisih2)
+                                            {
+                                                tanggalMulai = tanggalMulai.AddDays(1);
+                                            }
+                                        }
+                                    }
+                                }
+                                tanggalMulai = tanggalMulai.AddDays(1);
+                            }
+                        }
+                        @{
+                            int selisih3 = (int)(tanggalSelesai - tanggalMulai).TotalDays;
+                        }
+                        @if (selisih3 >= 0)
+                        {
+                            for (int i = 0; i <= selisih3; i++)
+                            {
+                                cekTrue = false;
+
+                                @foreach (var tanggal in (List<string>)ViewData["tanggalarray"])
+                                {
+                                    if (tanggalMulai.ToString("dd-MM-yyyy").Equals(tanggal))
+                                    {
+                                        cekTrue = true;
+                                    }
+                                }
+
+                                if (cekTrue == false)
+                                {
+                                    if (tanggalMulai.DayOfWeek != DayOfWeek.Saturday && tanggalMulai.DayOfWeek != DayOfWeek.Sunday)
+                                    {
+                                        jam += 8;
+                                    }
+                                }
+                                tanggalMulai = tanggalMulai.AddDays(1);
+                                
+                            }
+                        }
+                        <td>Murni</td>
+                        <td>@jam</td>
+                        <td>Rekap Absensi @(((DateTime)ViewData["tanggalMulai"]).ToString("dd-MM-yyyy")) - @(((DateTime)ViewData["tanggalSelesai"]).ToString("dd-MM-yyyy"))</td>
+                        <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
+
+
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var mahasiswa in Model)
-                    {
-                        <tr>
-                            <td>@mahasiswa.nim</td>
-                            <td>@mahasiswa.nama</td>
-                            <td>@mahasiswa.jenis</td>
-                            <td>@mahasiswa.jumlah_jam</td>
-                            <td>@mahasiswa.keterangan</td>
-                            <td>@mahasiswa.tanggal.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    inc++;
+                }
+            </tbody>
+        </table>
     </div>
-</section>
+</div>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Initialize Datatables for the second table
-        var table = new simpleDatatables.DataTable('.datatable');
+        var table = $('#absensiTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export to Excel',
+                    className: 'btn-excel' // Custom class for styling
+                }
+            ],
+            initComplete: function () {
+                // Add custom styles to the Excel export button
+                $('.btn-excel').css({
+                    'background-color': '#4caf50',
+                    'color': '#fff',
+                    'border': '1px solid #4caf50',
+                    'border-radius': '3px',
+                    'padding': '5px 10px',
+                    'cursor': 'pointer'
+                });
+
+                // Hover effect for the Excel export button
+                $('.btn-excel').hover(function () {
+                    $(this).css({
+                        'background-color': '#45a049',
+                        'border': '1px solid #45a049'
+                    });
+                }, function () {
+                    $(this).css({
+                        'background-color': '#4caf50',
+                        'border': '1px solid #4caf50'
+                    });
+                });
+            }
+        });
     });
 </script>
 

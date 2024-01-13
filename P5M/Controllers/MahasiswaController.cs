@@ -4,9 +4,11 @@ using System.Linq;
 using P5M.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace P5M.Controllers
 {
+    [Authorize]
     public class MahasiswaController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -16,11 +18,27 @@ namespace P5M.Controllers
             _dbContext = dbContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var activeMahasiswaList = _dbContext.Mahasiswa.Where(m => m.status == 1).ToList();
-            return View(activeMahasiswaList);
+            List<MahasiswaModel> mahasiswaList = null; // Corrected the type
+
+            using (HttpClient client = new HttpClient())
+            {
+                string apiUrl = "https://api.polytechnic.astra.ac.id:2906/api_dev/efcc359990d14328fda74beb65088ef9660ca17e/SIA/getListMahasiswa?id_konsentrasi=3";
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    mahasiswaList = JsonConvert.DeserializeObject<List<MahasiswaModel>>(apiResponse);
+                    ViewData["Mahasiswa"] = mahasiswaList;
+                }
+            }
+
+            return View(mahasiswaList);
         }
+
+
 
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -97,7 +115,7 @@ namespace P5M.Controllers
                 existingMahasiswaModel.kelas = mahasiswaModel.kelas;
                 existingMahasiswaModel.nama = mahasiswaModel.nama;
                 existingMahasiswaModel.email = mahasiswaModel.email;
-                existingMahasiswaModel.angkatan = mahasiswaModel.angkatan;
+                existingMahasiswaModel.mhs_angkatan = mahasiswaModel.mhs_angkatan;
                 existingMahasiswaModel.dosen_wali = mahasiswaModel.dosen_wali;
                 existingMahasiswaModel.status = mahasiswaModel.status;
 

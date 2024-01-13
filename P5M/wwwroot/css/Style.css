@@ -1,0 +1,406 @@
+body {
+	padding-top: 90px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.polman-nav-static-top {
+	top: 0;
+	left: 0;
+	right: 0;
+	position: fixed;
+	height: 70px;
+	width: 100% !important;
+	padding: 10px 20px 10px 20px;
+	box-shadow: 0px 2px 0px 0px #eee;
+	background-color: white;
+	z-index: 4;
+}
+
+.background-image {
+	background-image: url("../wwwroot/assets_login/images/IMG_Background.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 100vh;
+}
+
+@media only screen and (max-width: 767px) {
+	.background-image {
+		background-size: contain;
+	}
+}
+
+.polman-nav-static-bottom {
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: fixed;
+	height: 50px;
+	opacity: 0.9 !important;
+	width: 100% !important;
+	padding: 12px 5px 5px 5px;
+	font-size: 12px;
+	box-shadow: 0px 2px 0px 0px #eee;
+	background-color: white;
+	z-index: -1;
+	text-align: center;
+}
+
+.polman-nav-static-right {
+	top: 71px;
+	position: fixed;
+	left: 0;
+	width: 100%;
+	box-shadow: 0px 0px 2px 0px #eee;
+	background-color: white;
+	z-index: 3;
+	bottom: 0;
+	overflow-y: auto;
+}
+
+.polman-img-stretch {
+	width: 100%;
+	height: 100%;
+	border: 1px solid #ddd;
+}
+
+.polman-space {
+	margin-top: 10px;
+}
+
+.polman-menu {
+	display: none;
+}
+
+.polman-menu-bar {
+	display: initial;
+}
+
+.polman-menu-active {
+	background-color: #eeeeff;
+	font-weight: bold;
+}
+
+.polman-notifikasi {
+	display: initial;
+}
+
+.polman-username {
+	display: initial;
+}
+
+.polman-breadcrumb {
+	font-weight: bold;
+	background-color: white;
+	margin: -16px;
+}
+
+.polman-badge {
+	position: absolute;
+	top: 15px;
+	margin-left: 18px;
+}
+
+.polman-form-login {
+	width: 100%;
+	background-color: white;
+	padding: 30px !important;
+	border: 3px #eee solid;
+}
+
+.cal_Theme1 .ajax__calendar_container {
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	font-size: 12px;
+	padding: 0;
+	width: 200px;
+}
+
+.cal_Theme1 .ajax__calendar_header {
+	background-color: #fff;
+	margin-bottom: 8px;
+	margin-top: 5px;
+}
+
+.cal_Theme1 .ajax__calendar_next,
+.cal_Theme1 .ajax__calendar_prev,
+.cal_Theme1 .ajax__calendar_title {
+	color: #004080;
+	padding-top: 3px;
+	margin-top: 4px;
+}
+
+.cal_Theme1 .ajax__calendar_invalid {
+	color: red;
+}
+
+.cal_Theme1 .ajax__calendar_body {
+	background-color: #ffffff;
+	border: 0px solid #ccc;
+}
+
+.cal_Theme1 .ajax__calendar_dayname {
+	text-align: center;
+	font-weight: 700;
+	margin-bottom: 4px;
+	margin-top: 2px;
+}
+
+.cal_Theme1 .ajax__calendar_day {
+	text-align: center;
+	height: 20px;
+	width: 25px;
+	font-size: 12px;
+}
+
+.cal_Theme1 .ajax__calendar_active,
+.cal_Theme1 .ajax__calendar_hover .ajax__calendar_day,
+.cal_Theme1 .ajax__calendar_hover .ajax__calendar_month,
+.cal_Theme1 .ajax__calendar_hover .ajax__calendar_year {
+	color: #004080;
+	font-weight: 700;
+	background-color: #fff;
+}
+
+.cal_Theme1 .ajax__calendar_today {
+	font-weight: 700;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+.cal_Theme1 .ajax__calendar_hover .ajax__calendar_title,
+.cal_Theme1 .ajax__calendar_hover .ajax__calendar_today,
+.cal_Theme1 .ajax__calendar_other {
+	color: #bbb;
+}
+
+.cal_Theme1 table tr td {
+	height: 0;
+	width: 0;
+	padding: 0 !important;
+	margin: 0 !important;
+	border-width: 0 !important;
+}
+
+.AutoExtenderHighlight,
+.AutoExtenderList {
+	color: #222;
+	cursor: pointer;
+	padding: 5px;
+	margin-left: -40px;
+	max-width: 600px;
+	z-index: 99999 !important;
+}
+
+.AutoExtender {
+	font-family: Verdana;
+	font-size: 1.1em;
+	border: 1px solid #aaa;
+	border-top: 0;
+	background-color: #fff;
+	list-style: none;
+	margin-top: 0;
+	max-width: 600px;
+	z-index: 99999 !important;
+}
+
+.AutoExtenderList {
+	margin-right: -40px;
+	z-index: 99999 !important;
+}
+
+.AutoExtenderHighlight {
+	background-color: #dadada;
+	border-bottom: solid 1px #aaa;
+	border-top: solid 1px #aaa;
+	z-index: 99999 !important;
+}
+
+.pagination-ys {
+	padding-left: 0;
+	margin: 20px 0;
+	border-radius: 4px;
+}
+
+.pagination-ys tr {
+	background-color: transparent !important;
+}
+
+.pagination-ys table > tbody > tr > td {
+	display: inline;
+	border: none;
+}
+
+.pagination-ys table > tbody > tr > td > a,
+.pagination-ys table > tbody > tr > td > span {
+	position: relative;
+	float: left;
+	padding: 8px 12px;
+	line-height: 1.42857143;
+	text-decoration: none;
+	color: #333;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	margin-left: -1px;
+}
+
+.pagination-ys table > tbody > tr > td > span {
+	position: relative;
+	float: left;
+	padding: 8px 12px;
+	line-height: 1.42857143;
+	text-decoration: none;
+	margin-left: -1px;
+	z-index: 2;
+	color: #333;
+	background-color: #efefef;
+	border-color: #ddd;
+	cursor: default;
+}
+
+.pagination-ys table > tbody > tr > td:first-child > a,
+.pagination-ys table > tbody > tr > td:first-child > span {
+	margin-left: 0;
+	border-bottom-left-radius: 4px;
+	border-top-left-radius: 4px;
+}
+
+.pagination-ys table > tbody > tr > td:last-child > a,
+.pagination-ys table > tbody > tr > td:last-child > span {
+	border-bottom-right-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.pagination-ys table > tbody > tr > td > a:focus,
+.pagination-ys table > tbody > tr > td > a:hover,
+.pagination-ys table > tbody > tr > td > span:focus,
+.pagination-ys table > tbody > tr > td > span:hover {
+	color: #333;
+	background-color: #eee;
+	border-color: #ddd;
+}
+
+.grid th {
+	text-align: center;
+}
+
+.polman-adjust1 {
+	margin-top: 0px;
+}
+
+.polman-adjust2 {
+	display: none !important;
+}
+
+.polman-adjust3 {
+	display: initial !important;
+}
+
+.scrollstyle::-webkit-scrollbar-track {
+	background-color: #ffffff;
+}
+
+.scrollstyle::-webkit-scrollbar {
+	border-radius: 10px;
+	width: 7px;
+	height: 7px;
+	background-color: #000000;
+}
+
+.scrollstyle::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: #ddd;
+}
+
+.headcol {
+	position: absolute !important;
+	width: 150px !important;
+	min-width: 150px !important;
+	left: 20px !important;
+	top: auto !important;
+}
+
+body,
+html {
+	height: 100%;
+	font-family: Ubuntu-Regular, sans-serif;
+	background-image: url("~/assests_login/img/gedungastra1234.jpg");
+}
+
+@media screen and (min-width: 1000px) {
+	body {
+		padding-left: 275px;
+		padding-right: 25px;
+	}
+
+	.polman-nav-static-top {
+		padding: 10px 30px 10px 30px;
+	}
+
+	.polman-nav-static-bottom {
+		text-align: left;
+		height: 70px;
+		padding: 23px 30px 25px 30px;
+		font-size: initial;
+	}
+
+	.polman-space {
+		margin-top: 0px;
+	}
+
+	.polman-menu {
+		display: initial;
+		position: fixed;
+		right: 35px;
+	}
+
+	.polman-menu-bar {
+		display: none;
+	}
+
+	.polman-notifikasi {
+		position: fixed;
+		top: 10px;
+		right: 20px;
+	}
+
+	.polman-nav-static-right {
+		display: initial !important;
+		width: 250px !important;
+		box-shadow: 0px 0px 2px 2px #eee;
+	}
+
+	.polman-username {
+		display: none;
+	}
+
+	.polman-badge {
+		top: 5px;
+		margin-left: 20px;
+	}
+
+	.polman-form-login {
+		position: fixed;
+		width: 400px;
+		right: 75px;
+		margin: 30px;
+		background-color: white;
+	}
+
+	.polman-adjust1 {
+		margin-top: 32px;
+	}
+
+	.polman-adjust2 {
+		display: initial !important;
+	}
+
+	.polman-adjust3 {
+		display: none !important;
+	}
+
+	.headcol {
+		left: 277px !important;
+	}
+}

@@ -1,11 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Microsoft.AspNetCore.Http
+@{
+    var loggedInUsername = ViewContext.HttpContext.Session.GetString("LoggedInUsername");
+    var loggedInRole = ViewContext.HttpContext.Session.GetString("LoggedInRole");
+    var LoggedInNpeng = ViewContext.HttpContext.Session.GetString("LoggedInNpeng");
+}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>P5M Manajemen Informatika ASP</title>  
+    <title>P5M Manajemen Informatika ASP @loggedInUsername</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -22,26 +29,29 @@
     <link href="~/Content/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="~/Content/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
     <link href="~/Content/assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="~/Content/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="~/Content/assets/vendor/quill/quill.bubble.css" rel="stylesheet">   
     <link href="~/Content/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="~/Content/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
 
     <!-- Template Main CSS File -->
     <link href="~/Content/assets/css/style.css" rel="stylesheet">
 
-    <!-- =======================================================
-    * Template Name: NiceAdmin
-    * Updated: Aug 30 2023 with Bootstrap v5.3.1
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+    <!--Export-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <!--End Export-->
     <!-- DataTables CSS -->
+
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 
     <!-- DataTables JS -->
@@ -62,6 +72,24 @@
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
+        
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+         
+        </li><!-- End Search Icon-->
+
+       
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        Selamat Datang&nbsp;@loggedInUsername
+          </a>
+        </ul>
+
+    </nav>
 
     </header><!-- End Header -->
     <!-- ======= Sidebar ======= -->
@@ -70,36 +98,46 @@
         <ul class="sidebar-nav" id="sidebar-nav">
 
             <li class="nav-item">
-                <a class="nav-link collapsed" asp-controller="Dashboard" asp-action="Index">
+                <a class="nav-link collapsed" asp-controller="Home" asp-action="Dashboard">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
             </li><!-- End Dashboard Nav -->
-
- 
-            <li class="nav-item">
-                <a class="nav-link collapsed" asp-controller="Pengguna" asp-action="Index">
-                    <i class="bi bi-person-rolodex"></i>
-                    <span>Pengguna</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" asp-controller="Mahasiswa" asp-action="Index">
-                    <i class="bi bi-ui-checks-grid"></i>
-                    <span>Mahasiswa</span>
-                </a>
-            </li>
+            @if (loggedInRole == "KOORDINATOR SOP dan TATIB")
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Pengguna" asp-action="Index">
+                        <i class="bi bi-person-rolodex"></i>
+                        <span>Pengguna</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Libur" asp-action="Index">
+                        <i class="bi bi-calendar-date"></i>
+                        <span>Libur</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Mahasiswa" asp-action="Index">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Mahasiswa</span>
+                    </a>
+                </li>
+            }
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-postcard"></i><span>Absensi</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
+                    @if (loggedInRole == "KOORDINATOR SOP dan TATIB")
+                    {
+                        <li>
 
-                        <a asp-controller="Pelanggaran" asp-action="Index">
-                            <i class="bi bi-circle"></i><span>Import Absensi</span>
-                        </a>
-                    </li>
+                            <a asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-circle"></i><span>Import Absensi</span>
+                            </a>
+                        </li>
+                    }
                     <li>
                         <a asp-controller="P5M" asp-action="HistoryAbsensi">
                             <i class="bi bi-circle"></i><span>Laporan Absensi</span>
@@ -114,21 +152,27 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-ui-checks-grid"></i><span>Pelanggaran</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-exclamation-triangle"></i></i><span>Pelanggaran</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    @if (loggedInRole == "KOORDINATOR SOP dan TATIB")
+                    {
+                        <li>
+                            <a asp-controller="Pelanggaran" asp-action="Index">
+                                <i class="bi bi-circle"></i><span>Kelola Pelanggaran</span>
+                            </a>
+                        </li>
+                    }
+                    @if (loggedInRole != "SEKRETARIS PRODI")
+                    {
+                        <li>
+                            <a asp-controller="P5M" asp-action="Create">
+                                <i class="bi bi-circle"></i><span>P5M</span>
+                            </a>
+                        </li>
+                    }
                     <li>
-                        <a asp-controller="Pelanggaran" asp-action="Index">
-                            <i class="bi bi-circle"></i><span>Kelola Pelanggaran</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Pelanggaran" asp-action="Index">
-                            <i class="bi bi-circle"></i><span>P5M</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Pelanggaran" asp-action="Index">
+                        <a asp-controller="P5M" asp-action="HistoryP5M">
                             <i class="bi bi-circle"></i><span>History P5M</span>
                         </a>
                     </li>
@@ -140,19 +184,24 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" asp-controller="P5M" asp-action="Create">
-                    <i class="bi bi-file-earmark-person"></i>
+                <a class="nav-link collapsed" asp-controller="Login" asp-action="SSO">
+                    <i class="bi bi-box-arrow-in-up-left"></i>
                     <span>Halaman SSO</span>
                 </a>
             </li><!-- End SSO Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" asp-controller="Pelanggaran" asp-action="Index">
+                <a class="nav-link collapsed" asp-controller="Login" asp-action="Logout">
                     <i class="bi bi-box-arrow-in-right"></i>
                     <span>Logout</span>
                 </a>
             </li>
         </ul>
+        <form id="ssoForm" asp-controller="Login" asp-action="SSO" method="post" style="visibility:hidden">
+            <!-- Include hidden fields for parameters -->
+            <input type="hidden" name="username" value="@LoggedInNpeng" />
+            <input type="hidden" name="role" value="@loggedInRole" />
+        </form>
 
     </aside><!-- End Sidebar-->
 
@@ -167,7 +216,7 @@
                     <a href="https://www.polytechnic.astra.ac.id//">Politeknik Astra</a>
                 </div>
         </div>
-    </footer><
+    </footer>
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

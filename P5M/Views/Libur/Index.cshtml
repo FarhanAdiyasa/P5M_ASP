@@ -1,0 +1,100 @@
+﻿@model List<P5M.Models.LiburModel>
+@{
+    ViewData["Title"] = "Daftar Libur";
+    int no = 1;
+}
+
+<section class="section" style="font-size:14px">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card overflow-auto">
+                <div class="card-body">
+                    <h5 class="card-title">Daftar Libur</h5>
+                    <hr />
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="row">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-check-circle me-1"></i>
+                                <strong>Sukses!</strong> @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    }
+
+                    <a class="btn btn-primary" asp-action="Create">Tambah Libur</a>
+                    <!-- Table with stripped rows -->
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Tanggal</th>
+                                <th scope="col">Deskripsi</th>
+                                <th scope="col">Kategori</th>
+                                <th scope="col">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var libur in Model)
+                            {
+                                <tr>
+                                    <td>@(no++)</td>
+                                    <td>@libur.tanggal.ToString("dd-MM-yyyy")</td>
+                                    <td>@libur.deskripsi</td>
+                                    <td>@libur.kategori</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger delete-button" data-id="@libur.id">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <a asp-controller="Libur" asp-action="Edit" asp-route-id="@libur.id" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $(".delete-button").click(function () {
+            var liburId = $(this).data("id");
+
+            swal({
+                title: "Hapus Libur?",
+                text: "Apakah Anda yakin ingin menghapus libur ini?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    // Mengirimkan permintaan penghapusan ke controller
+                    $.ajax({
+                        url: "/Libur/Delete/" + liburId,
+                        type: "POST",
+                        success: function (data) {
+                            // Tampilkan pesan sukses jika diperlukan
+                            if (data.success) {
+                                swal("Sukses!", data.message, "success");
+                                // Refresh halaman setelah menghapus
+                                location.reload();
+                            } else {
+                                swal("Gagal!", data.message, "error");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var errorMessage = xhr.status + ': ' + xhr.statusText;
+                            swal("Error!", "Terjadi kesalahan saat menghapus libur. " + errorMessage, "error");
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>

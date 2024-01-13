@@ -1,0 +1,19 @@
+﻿<!-- _ImportStatusPartial.cshtml -->
+<div id="importStatus">
+    @if (!string.IsNullOrEmpty(ViewBag.ImportStatus))
+    {
+        <div class="alert alert-info" role="alert">
+            @ViewBag.ImportStatus
+        </div>
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        setInterval(function () {
+            $.get('/Home/GetImportStatus', function (data) {
+                $('#importStatus').html(data);
+            });
+        }, 1000); // Update every 3 seconds (adjust as needed)
+    });
+</script>

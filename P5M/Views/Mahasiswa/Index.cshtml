@@ -20,8 +20,8 @@
                         </div>
                     </div>
                 }
-
-                <a class="btn btn-primary" asp-action="Create">Tambah Mahasiswa</a>
+@*
+                <a class="btn btn-primary" asp-action="Create">Tambah Mahasiswa</a>*@
                 <!-- Table with stripped rows -->
                 <table class="table datatable" >
                     <thead>
@@ -31,8 +31,9 @@
                             <th scope="col">Nama</th>
                             <th scope="col">Email</th>
                             <th scope="col">Angkatan</th>
+                            <th scope="col">Kelas</th>
                             <th scope="col">Dosen Wali</th>
-                            <th scope="col">Aksi</th>
+                            @*<th scope="col">Aksi</th>*@
                         </tr>
                     </thead>
                     <tbody>
@@ -43,16 +44,17 @@
                                 <td>@mahasiswa.nim</td>
                                 <td>@mahasiswa.nama</td>
                                 <td>@mahasiswa.email</td>
-                                <td>@mahasiswa.angkatan</td>
+                                <td>@mahasiswa.mhs_angkatan</td>
+                                <td>@mahasiswa.kelas</td>
                                 <td>@mahasiswa.dosen_wali</td>
-                                <td>
+                               @* <td>
                                     <button class="btn btn-sm btn-danger delete-button" data-nim="@mahasiswa.nim">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                     <a asp-controller="Mahasiswa" asp-action="Edit" asp-route-nim="@mahasiswa.nim" class="btn btn-sm btn-primary">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                </td>
+                                </td>*@
                             </tr>
                         }
                     </tbody>
